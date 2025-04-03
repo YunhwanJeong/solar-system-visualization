@@ -9,32 +9,39 @@ const cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
 scene.add(cubeMesh);
 
-// const camera = new THREE.PerspectiveCamera(
-// 	50,
-// 	window.innerWidth / window.innerHeight,
-// 	0.1,
-// 	200,
-// );
-
-const aspectRatio = window.innerWidth / window.innerHeight;
-
-const camera = new THREE.OrthographicCamera(
-	-1 * aspectRatio,
-	1 * aspectRatio,
-	1,
-	-1,
+const camera = new THREE.PerspectiveCamera(
+	50,
+	window.innerWidth / window.innerHeight,
 	0.1,
 	200,
 );
 
+// const aspectRatio = window.innerWidth / window.innerHeight;
+
+// const camera = new THREE.OrthographicCamera(
+// 	-1 * aspectRatio,
+// 	1 * aspectRatio,
+// 	1,
+// 	-1,
+// 	0.1,
+// 	200,
+// );
+
 camera.position.z = 5;
 const canvas = document.getElementById("threejs-canvas");
-const renderer = new THREE.WebGLRenderer({ canvas });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+window.addEventListener("resize", () => {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
-controls.autoRotate = true;
+// controls.autoRotate = true;
 
 controls.update();
 
