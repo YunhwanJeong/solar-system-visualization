@@ -13,6 +13,11 @@ const cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
 scene.add(cubeMesh);
 cubeMesh.add(new THREE.AxesHelper(2));
 
+cubeMesh.rotation.reorder("YXZ");
+
+cubeMesh.rotation.y = THREE.MathUtils.degToRad(90);
+cubeMesh.rotation.x = THREE.MathUtils.degToRad(45);
+
 const camera = new THREE.PerspectiveCamera(
 	50,
 	window.innerWidth / window.innerHeight,
@@ -38,7 +43,15 @@ controls.enableDamping = true;
 
 controls.update();
 
+const clock = new THREE.Clock();
+
 function animate() {
+	const delta = clock.getDelta();
+
+	cubeMesh.rotation.y += THREE.MathUtils.degToRad(1) * delta * 20;
+	cubeMesh.scale.x = Math.sin(clock.getElapsedTime()) * 2;
+	cubeMesh.position.x = Math.sin(clock.getElapsedTime()) * 2;
+
 	requestAnimationFrame(animate);
 	controls.update();
 	renderer.render(scene, camera);
